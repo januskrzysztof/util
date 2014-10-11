@@ -1,5 +1,5 @@
 {
-  "name": "tutto/bundle/util-bundle",
+  "name": "tutto/util-bundle",
   "description": "This bundle provides useful classes",
   "keywords": ["util"],
   "type": "symfony-bundle",

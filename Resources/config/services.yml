@@ -1,4 +1,4 @@
 services:
-#    tutto_util.example:
-#        class: Tutto\Bundle\UtilBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    tutto_util.process_form:
+        class: Tutto\Bundle\UtilBundle\Logic\ProcessForm
+        arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher"]

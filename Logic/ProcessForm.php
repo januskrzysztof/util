@@ -78,7 +78,7 @@ class ProcessForm {
                  */
                 if (!isset($repository)) {
                     try {
-                        if (!$this->em->getMetadataFactory()->getMetadataFor(get_class($entity))) {
+                        if ($entity === null || !$this->em->getMetadataFactory()->getMetadataFor(get_class($entity))) {
                             throw new EntityNotFoundException();
                         }
                     } catch (MappingException $ex) {

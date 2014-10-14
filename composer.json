@@ -9,15 +9,8 @@
     "email": "fluke.kuczwa@gmail.com"
   }],
   "require": {
-    "symfony/framework-bundle": "~2.0",
-    "jquery/jquery": "2.*"
+    "symfony/framework-bundle": "~2.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/jquery/jquery"
-    }
-  ],
   "autoload": {
     "psr-0": {
       "Tutto\\Bundle\\UtilBundle": ""

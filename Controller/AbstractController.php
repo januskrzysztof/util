@@ -23,6 +23,7 @@ abstract class AbstractController extends Controller {
     const TYPE_ERROR   = 'error';
     const TYPE_WARNING = 'warning';
     const TYPE_INFO    = 'info';
+
     const MESSAGE_SUCCESS = 'flash_bag.success';
     const MESSAGE_WARNING = 'flash_bag.warning';
     const MESSAGE_ERROR   = 'flash_bag.error';

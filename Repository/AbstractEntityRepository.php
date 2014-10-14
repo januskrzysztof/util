@@ -17,6 +17,10 @@ abstract class AbstractEntityRepository extends EntityRepository {
      */
     public function update($entity) {
         if ($entity instanceof AbstractEntity) {
+            if ($entity->getCreatedAt() === null) {
+                $entity->setCreatedAt(new DateTime());
+            }
+
             $entity->setModifiedAt(new DateTime());
         }
 

@@ -4,6 +4,7 @@ namespace Tutto\Bundle\UtilBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 use Tutto\Bundle\UtilBundle\Logic\Status;
 
 /**
@@ -25,7 +26,7 @@ class StatusType extends AbstractType {
         $resolver->setDefaults([
             'required' => true,
             'choices'  => [
-                Status::ENABLED => 'status.enabled',
+                Status::ENABLED  => 'status.enabled',
                 Status::DISABLED => 'status.disabled',
                 Status::ARCHIVED => 'status.archived'
             ]

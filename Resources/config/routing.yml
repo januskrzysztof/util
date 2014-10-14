@@ -1,3 +1,0 @@
-DemoController:
-    resource: "@TuttoExampleBundle/Controller/DefaultController.php"
-    type: annotation

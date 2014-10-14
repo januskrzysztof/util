@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormInterface;
+use Tutto\Bundle\UtilBundle\Logic\ProcessForm\Event;
 use Exception;
 
 use Tutto\Bundle\UtilBundle\Repository\AbstractEntityRepository;
@@ -23,6 +24,8 @@ class ProcessForm {
     const POST_UPDATE         = 'postUpdate';
     const PRE_UPDATE          = 'preUpdate';
     const ON_RENDER           = 'onRender';
+    const ON_EXCEPTION        = 'onException';
+    const ON_FORM_ERROR       = 'onFormError';
 
     /**
      * @var EntityManagerInterface
@@ -111,6 +114,14 @@ class ProcessForm {
                     }
                 } catch (Exception $ex) {
                     $this->em->rollback();
+                    if ($dispatcher->hasListeners(self::ON_EXCEPTION)) {
+                        $event->setException($ex);
+                        $dispatcher->dispatch(self::ON_EXCEPTION, $event);
+                    }
+                }
+            } else {
+                if ($dispatcher->hasListeners(self::ON_FORM_ERROR)) {
+                    $dispatcher->dispatch(self::ON_FORM_ERROR, $event);
                 }
             }
         }

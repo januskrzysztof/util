@@ -1,4 +1,16 @@
 services:
+    tutto_util.is_type:
+        class: Tutto\Bundle\UtilBundle\Twig\IsTypeExtension
+        tags:
+            - { name: twig.extension }
+
+    tutto_util.layout_resolver:
+        class: Tutto\Bundle\UtilBundle\Twig\LayoutResolver
+        arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }
+
     tutto_util.process_form:
         class: Tutto\Bundle\UtilBundle\Logic\ProcessForm
         arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher"]
+

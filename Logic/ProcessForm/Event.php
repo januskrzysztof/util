@@ -1,12 +1,13 @@
 <?php
 
-namespace Tutto\Bundle\UtilBundle\Logic;
+namespace Tutto\Bundle\UtilBundle\Logic\ProcessForm;
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\Event as BaseEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Exception;
 
 /**
  * Class Event
@@ -37,6 +38,11 @@ class Event extends BaseEvent {
      * @var Request
      */
     private $request;
+
+    /**
+     * @var Exception
+     */
+    private $exception;
 
     /**
      * @param FormInterface $form
@@ -117,5 +123,19 @@ class Event extends BaseEvent {
      */
     public function setRequest(Request $request) {
         $this->request = $request;
+    }
+
+    /**
+     * @return Exception
+     */
+    public function getException() {
+        return $this->exception;
+    }
+
+    /**
+     * @param Exception $exception
+     */
+    public function setException(Exception $exception) {
+        $this->exception = $exception;
     }
 }

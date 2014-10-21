@@ -3,6 +3,7 @@
 namespace Tutto\Bundle\UtilBundle\Logic;
 
 use Symfony\Component\PropertyAccess\PropertyAccessor as BasePropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
 /**
  * Class PropertyAccessor
@@ -11,7 +12,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor as BasePropertyAccessor;
 class PropertyAccessor extends BasePropertyAccessor {
     /**
      * @param array|object $objectOrArray
-     * @param string|\Symfony\Component\PropertyAccess\PropertyPathInterface $propertyPath
+     * @param string|PropertyPathInterface $propertyPath
      * @return mixed
      */
     public function getValue($objectOrArray, $propertyPath) {

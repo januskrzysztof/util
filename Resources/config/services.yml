@@ -14,3 +14,6 @@ services:
         class: Tutto\Bundle\UtilBundle\Logic\ProcessForm
         arguments: ["@doctrine.orm.default_entity_manager", "@event_dispatcher"]
 
+    route_definition.factory:
+        class: Tutto\Bundle\UtilBundle\Logic\RouteDefinitionFactory
+        arguments: ["@router", "@property_accessor"]

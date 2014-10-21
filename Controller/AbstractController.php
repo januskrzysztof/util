@@ -19,7 +19,7 @@ use Tutto\Bundle\UtilBundle\Logic\ProcessForm\Event;
  * @package Tutto\Bundle\UtilBundle\Controller
  */
 abstract class AbstractController extends Controller {
-    const TYPE_SUCCESS  = 'sucess';
+    const TYPE_SUCCESS = 'sucess';
     const TYPE_ERROR   = 'error';
     const TYPE_WARNING = 'warning';
     const TYPE_INFO    = 'info';

@@ -84,4 +84,88 @@ class RouteDefinition {
 
         return $this->router->generate($this->routeName, $routeParams, $this->type);
     }
+
+    /**
+     * @return Router
+     */
+    public function getRouter() {
+        return $this->router;
+    }
+
+    /**
+     * @param Router $router
+     */
+    public function setRouter($router) {
+        $this->router = $router;
+    }
+
+    /**
+     * @return PropertyAccessorInterface
+     */
+    public function getPropertyAccessor() {
+        return $this->propertyAccessor;
+    }
+
+    /**
+     * @param PropertyAccessorInterface $propertyAccessor
+     */
+    public function setPropertyAccessor($propertyAccessor) {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRouteName() {
+        return $this->routeName;
+    }
+
+    /**
+     * @param string $routeName
+     */
+    public function setRouteName($routeName) {
+        $this->routeName = $routeName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteDefinition() {
+        return $this->routeDefinition;
+    }
+
+    /**
+     * @param array $routeDefinition
+     */
+    public function setRouteDefinition($routeDefinition) {
+        $this->routeDefinition = $routeDefinition;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalRouteParams() {
+        return $this->additionalRouteParams;
+    }
+
+    /**
+     * @param array $additionalRouteParams
+     */
+    public function setAdditionalRouteParams($additionalRouteParams) {
+        $this->additionalRouteParams = $additionalRouteParams;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isType() {
+        return $this->type;
+    }
+
+    /**
+     * @param boolean $type
+     */
+    public function setType($type) {
+        $this->type = $type;
+    }
 }

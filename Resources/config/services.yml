@@ -1,12 +1,17 @@
 services:
-    tutto_util.is_type:
+    tutto_util.twig.is_type:
         class: Tutto\Bundle\UtilBundle\Twig\IsTypeExtension
         tags:
             - { name: twig.extension }
 
-    tutto_util.layout_resolver:
+    tutto_util.twig.layout_resolver:
         class: Tutto\Bundle\UtilBundle\Twig\LayoutResolver
         arguments: ["@service_container"]
+        tags:
+            - { name: twig.extension }
+
+    tutto_util.twig.form:
+        class: Tutto\Bundle\UtilBundle\Twig\FormExtension
         tags:
             - { name: twig.extension }
 

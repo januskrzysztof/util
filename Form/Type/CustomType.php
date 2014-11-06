@@ -27,14 +27,21 @@ class CustomType extends AbstractType {
     protected $defaults;
 
     /**
+     * @var string
+     */
+    protected $parent;
+
+    /**
      * @param string $name
      * @param callable $callback
      * @param array $defaults
+     * @param string $parent
      */
-    function __construct($name, $callback, array $defaults = []) {
-        $this->name = $name;
+    function __construct($name, $callback, array $defaults = [], $parent = 'form') {
+        $this->name     = $name;
         $this->callback = $callback;
         $this->defaults = $defaults;
+        $this->parent   = $parent;
     }
 
     /**
@@ -45,6 +52,12 @@ class CustomType extends AbstractType {
         call_user_func_array($this->callback, [$builder, $options]);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getParent() {
+        return $this->parent;
+    }
 
     /**
      * @param OptionsResolverInterface $resolver

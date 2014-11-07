@@ -71,7 +71,7 @@ class ProcessForm {
             if ($form->handleRequest($request)->isValid()) {
                 if ($entity === null) {
                     $entity = $form->getData();
-                    $event->setEntity($event);
+                    $event->setEntity($entity);
                 }
 
                 /** Dispatch POST_FORM_VALIDATE events */

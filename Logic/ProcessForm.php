@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Tutto\Bundle\UtilBundle\Logic\ProcessForm\Event;
 use Exception;
 
@@ -63,9 +64,17 @@ class ProcessForm {
             $dispatcher->dispatch(self::PRE_REQUEST, $event);
         }
 
+        if ($event->isPropagationStopped()) {
+            return $this->stopAndReturnResponse($event);
+        }
+
         if ($request->isMethod('post')) {
             if ($dispatcher->hasListeners(self::PRE_FORM_VALIDATE)) {
                 $dispatcher->dispatch(self::PRE_FORM_VALIDATE, $event);
+            }
+
+            if ($event->isPropagationStopped()) {
+                return $this->stopAndReturnResponse($event);
             }
 
             if ($form->handleRequest($request)->isValid()) {
@@ -80,6 +89,10 @@ class ProcessForm {
                     $repository = $event->getRepository();
                 } else {
                     $repository = null;
+                }
+
+                if ($event->isPropagationStopped()) {
+                    return $this->stopAndReturnResponse($event);
                 }
 
                 /**
@@ -103,6 +116,10 @@ class ProcessForm {
                         $dispatcher->dispatch(self::PRE_UPDATE, $event);
                     }
 
+                    if ($event->isPropagationStopped()) {
+                        return $this->stopAndReturnResponse($event);
+                    }
+
                     if ($repository instanceof AbstractEntityRepository) {
                         /** @var AbstractEntityRepository $repository */
                         $repository->update($event->getEntity());
@@ -111,14 +128,20 @@ class ProcessForm {
                         $this->em->flush();
                     }
 
-                    $this->em->commit();
-
                     /** Dispatch POST_UPDATE events */
                     if ($dispatcher->hasListeners(self::POST_UPDATE)) {
                         $dispatcher->dispatch(self::POST_UPDATE, $event);
+
+                        $this->em->commit();
                         if ($event->getResponse()) {
                             return $event->getResponse();
                         }
+                    } else {
+                        $this->em->commit();
+                    }
+
+                    if ($event->isPropagationStopped()) {
+                        return $this->stopAndReturnResponse($event);
                     }
                 } catch (Exception $ex) {
                     $this->em->rollback();
@@ -126,10 +149,18 @@ class ProcessForm {
                         $event->setException($ex);
                         $dispatcher->dispatch(self::ON_EXCEPTION, $event);
                     }
+
+                    if ($event->isPropagationStopped()) {
+                        return $this->stopAndReturnResponse($event);
+                    }
                 }
             } else {
                 if ($dispatcher->hasListeners(self::ON_FORM_ERROR)) {
                     $dispatcher->dispatch(self::ON_FORM_ERROR, $event);
+                }
+
+                if ($event->isPropagationStopped()) {
+                    return $this->stopAndReturnResponse($event);
                 }
             }
         }
@@ -142,10 +173,7 @@ class ProcessForm {
             }
         }
 
-        return [
-            'form'   => $form->createView(),
-            'entity' => $entity
-        ];
+        return $this->stopAndReturnResponse($event);
     }
 
     /**
@@ -161,5 +189,21 @@ class ProcessForm {
      */
     public function addEventListener($eventName, $listener) {
         $this->eventDispatcher->addListener($eventName, $listener);
+    }
+
+    /**
+     * @param Event $event
+     * @return array|Response
+     */
+    private function stopAndReturnResponse(Event $event) {
+        if ($event->getResponse() !== null) {
+            return $event->getResponse();
+        } else {
+            return [
+                'form'      => $event->getForm()->createView(),
+                'entity'    => $event->getEntity(),
+                'exception' =>$event->getException(),
+            ];
+        }
     }
 }

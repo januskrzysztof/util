@@ -19,13 +19,14 @@ use Tutto\Bundle\UtilBundle\Repository\AbstractEntityRepository;
  * @package Tutto\Bundle\UtilBundle\Logic
  */
 class ProcessForm {
-    const PRE_HANDLE_REQUEST  = 'preHandleRequest';
-    const POST_HANDLE_REQUEST = 'postHandleRequest';
+    const PRE_REQUEST         = 'preRequest';
     const POST_UPDATE         = 'postUpdate';
     const PRE_UPDATE          = 'preUpdate';
     const ON_RENDER           = 'onRender';
     const ON_EXCEPTION        = 'onException';
     const ON_FORM_ERROR       = 'onFormError';
+    const PRE_FORM_VALIDATE   = 'preFormValidate';
+    const POST_FORM_VALIDATE  = 'postFormValidate';
 
     /**
      * @var EntityManagerInterface
@@ -54,19 +55,28 @@ class ProcessForm {
      * @throws Exception
      * @throws MappingException
      */
-    public function processForm(FormInterface $form, $entity, Request $request) {
+    public function processForm(FormInterface $form, Request $request, $entity = null) {
         $dispatcher = $this->eventDispatcher;
         $event      = new Event($form, $entity, $request);
 
-        if ($dispatcher->hasListeners(self::PRE_HANDLE_REQUEST)) {
-            $dispatcher->dispatch(self::PRE_HANDLE_REQUEST, $event);
+        if ($dispatcher->hasListeners(self::PRE_REQUEST)) {
+            $dispatcher->dispatch(self::PRE_REQUEST, $event);
         }
 
         if ($request->isMethod('post')) {
+            if ($dispatcher->hasListeners(self::PRE_FORM_VALIDATE)) {
+                $dispatcher->dispatch(self::PRE_FORM_VALIDATE, $event);
+            }
+
             if ($form->handleRequest($request)->isValid()) {
-                /** Dispatch POST_HANDLE_REQUEST events */
-                if ($dispatcher->hasListeners(self::POST_HANDLE_REQUEST)) {
-                    $dispatcher->dispatch(self::POST_HANDLE_REQUEST, $event);
+                if ($entity === null) {
+                    $entity = $form->getData();
+                    $event->setEntity($event);
+                }
+
+                /** Dispatch POST_FORM_VALIDATE events */
+                if ($dispatcher->hasListeners(self::POST_FORM_VALIDATE)) {
+                    $dispatcher->dispatch(self::POST_FORM_VALIDATE, $event);
                     $repository = $event->getRepository();
                 } else {
                     $repository = null;
@@ -88,8 +98,6 @@ class ProcessForm {
 
                 $this->em->beginTransaction();
                 try {
-                    $data = $form->getData();
-
                     /** Dispatch PRE_UPDATE events */
                     if ($dispatcher->hasListeners(self::PRE_UPDATE)) {
                         $dispatcher->dispatch(self::PRE_UPDATE, $event);
@@ -97,10 +105,10 @@ class ProcessForm {
 
                     if ($repository instanceof AbstractEntityRepository) {
                         /** @var AbstractEntityRepository $repository */
-                        $repository->update($data);
+                        $repository->update($event->getEntity());
                     } else {
-                        $this->em->persist($entity);
-                        $this->em->flush($entity);
+                        $this->em->persist($event->getEntity());
+                        $this->em->flush();
                     }
 
                     $this->em->commit();

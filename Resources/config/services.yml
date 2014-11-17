@@ -22,3 +22,12 @@ services:
     route_definition.factory:
         class: Tutto\Bundle\UtilBundle\Logic\RouteDefinitionFactory
         arguments: ["@router", "@property_accessor"]
+
+
+    tutto.user_provider:
+        class: Tutto\Bundle\UtilBundle\Repository\UserRepository
+        arguments: ["Tutto\Bundle\UtilBundle\Entity\User"]
+        calls:
+          - [ setEncoderFactory, ["@security.encoder_factory"] ]
+        factory_service: doctrine
+        factory_method: getRepository

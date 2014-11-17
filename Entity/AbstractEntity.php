@@ -21,7 +21,7 @@ class AbstractEntity {
      *
      * @var DateTime
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true, options={"default": "1990-01-01 00:00:00"})
@@ -29,7 +29,7 @@ class AbstractEntity {
      *
      * @var DateTime
      */
-    private $modifiedAt;
+    protected $modifiedAt;
 
     /**
      * @ORM\Column(type="integer", nullable=false, options={"default": 1})
@@ -37,14 +37,14 @@ class AbstractEntity {
      *
      * @var int
      */
-    private $status = Status::ENABLED;
+    protected $status = Status::ENABLED;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false, options={"default": 0})
+     * @ORM\Column(type="boolean", name="isDeleted", nullable=false, options={"default": 0})
      *
      * @var bool
      */
-    private $isDeleted = false;
+    protected $deleted = false;
 
     public function __construct() {
         $this->createdAt  = new DateTime();
@@ -97,13 +97,13 @@ class AbstractEntity {
      * @return bool
      */
     public function isDeleted() {
-        return $this->isDeleted;
+        return $this->deleted;
     }
 
     /**
      * @param boolean $isDeleted
      */
     public function setIsDeleted($isDeleted) {
-        $this->isDeleted = (boolean) $isDeleted;
+        $this->deleted = (boolean) $isDeleted;
     }
 }

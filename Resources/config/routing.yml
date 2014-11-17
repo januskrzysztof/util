@@ -1,0 +1,3 @@
+AuthorizationController:
+  resource: @TuttoUtilBundle/Controller/AuthorizationController.php
+  type: annotation

@@ -5,6 +5,7 @@ namespace Tutto\Bundle\UtilBundle\Form\Subscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * Class IgnoreNonSubmittedFields

@@ -1,0 +1,11 @@
+
+{% extends layoutResolver().resolve('@TuttoUtil/auth.layout.html.twig') %}
+
+{% block content %}
+    <form method="post" action="{{ path('tutto_check_path') }}" role="form">
+        {{ form_errors(form) }}
+        {{ form_row(form._username) }}
+        {{ form_row(form._password) }}
+        <button class="btn" type="submit">{{ "Submit"|trans }}</button>
+    </form>
+{% endblock %}

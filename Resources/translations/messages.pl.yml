@@ -2,3 +2,12 @@ status:
   enabled: Włączony
   disabled: Wyłączony
   archived: Zarchiwizowany
+
+email:
+  l: Adres e-mail
+  s: E-mail
+
+login:
+  login: Login
+  password: Hasło
+  remember_me: Pamiętaj mnie

@@ -154,15 +154,20 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
 
     /**
      * @param string $username The username
-     * @return UserInterface
+     * @return User
      * @throws UsernameNotFoundException if the user is not found
      */
     public function loadUserByUsername($username) {
         $query = $this->createQueryBuilder('user')
+            ->select('user, role, person, address, correspondenceAddress')
             ->innerJoin('user.role', 'role')
+            ->innerJoin('user.person', 'person')
+            ->leftJoin('person.address', 'address')
+            ->leftJoin('person.correspondenceAddress', 'correspondenceAddress')
             ->where("user.username = '{$username}'");
 
         try {
+
             /** @var User $user */
             $user = $query->getQuery()->getSingleResult();
         } catch (NoResultException $ex) {
@@ -221,7 +226,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
      * @param string $property
      * @param mixed $value
      */
-    private function setValueToUserProperty(User $user, $property, $value) {
+    protected function setValueToUserProperty(User $user, $property, $value) {
         $reflection = new ReflectionObject($user);
 
         if ($reflection->hasProperty($property)) {

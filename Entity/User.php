@@ -11,8 +11,8 @@ use Tutto\Bundle\UtilBundle\Logic\Status;
  * Class User
  * @package Tutto\Bundle\UtilBundle\Entity
  *
- * @ORM\Entity(repositoryClass="Tutto\Bundle\UtilBundle\Repository\UserRepository")
  * @ORM\Table(name="users")
+ * @ORM\MappedSuperclass()
  */
 class User extends AbstractEntity implements UserInterface {
     /**
@@ -63,7 +63,7 @@ class User extends AbstractEntity implements UserInterface {
     protected $activationCode = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Person")
+     * @ORM\OneToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Person", cascade={"all"})
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      *
      * @var Person
@@ -71,7 +71,6 @@ class User extends AbstractEntity implements UserInterface {
     protected $person;
 
     /**
-     * @Assert\NotBlank()
      * @Assert\Email()
      *
      * @var string
@@ -79,8 +78,6 @@ class User extends AbstractEntity implements UserInterface {
     protected $plainUsername;
 
     /**
-     * @Assert\NotBlank()
-     *
      * @var string
      */
     protected $plainPassword;

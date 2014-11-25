@@ -19,43 +19,59 @@ use Tutto\Bundle\UtilBundle\Logic\ProcessForm\Event;
  * @package Tutto\Bundle\UtilBundle\Controller
  */
 abstract class AbstractController extends Controller {
-    const TYPE_SUCCESS = 'sucess';
+    const TYPE_SUCCESS = 'success';
     const TYPE_ERROR   = 'error';
     const TYPE_WARNING = 'warning';
     const TYPE_INFO    = 'info';
 
-    const MESSAGE_SUCCESS = 'flash_bag.success';
-    const MESSAGE_WARNING = 'flash_bag.warning';
-    const MESSAGE_ERROR   = 'flash_bag.error';
-    const MESSAGE_INFO    = 'flash_bag.info';
+    const MESSAGE_SUCCESS = 'messages.success';
+    const MESSAGE_WARNING = 'messages.warning';
+    const MESSAGE_ERROR   = 'messages.error';
+    const MESSAGE_INFO    = 'messages.info';
 
     /**
      * @param string $type
      * @param string $message
+     * @param array $parameters
+     * @param null $domain
+     * @param null $locale
      */
-    protected function addFlashMessage($type, $message) {
-        $this->container->get('session')->getFlashBag()->add($type, $message);
+    protected function addFlashMessage($type, $message, array $parameters = [], $domain = null, $locale = null) {
+        if ($domain === null) {
+            $domain = 'flash_bags';
+        }
+
+        $this->container->get('session')->getFlashBag()->add($type, $this->trans($message, $parameters, $domain, $locale));
     }
 
     /**
      * @param string $message
+     * @param array $parameters
+     * @param null $domain
+     * @param null $locale
      */
-    protected function addFlashSuccess($message = self::MESSAGE_SUCCESS) {
-        $this->addFlashMessage(self::TYPE_SUCCESS, $message);
+    protected function addFlashSuccess($message = self::MESSAGE_SUCCESS, array $parameters = [], $domain = null, $locale = null) {
+        $this->addFlashMessage(self::TYPE_SUCCESS, $message, $parameters, $domain, $locale);
     }
 
     /**
      * @param string $message
+     * @param array $parameters
+     * @param null $domain
+     * @param null $locale
      */
-    protected function addFlashError($message = self::TYPE_ERROR) {
-        $this->addFlashMessage(self::TYPE_ERROR, $message);
+    protected function addFlashError($message = self::TYPE_ERROR, array $parameters = [], $domain = null, $locale = null) {
+        $this->addFlashMessage(self::TYPE_ERROR, $message, $parameters, $domain, $locale);
     }
 
     /**
      * @param string $message
+     * @param array $parameters
+     * @param null $domain
+     * @param null $locale
      */
-    protected function addFlashWarning($message = self::TYPE_WARNING) {
-        $this->addFlashMessage(self::TYPE_WARNING, $message);
+    protected function addFlashWarning($message = self::TYPE_WARNING, array $parameters = [], $domain = null, $locale = null) {
+        $this->addFlashMessage(self::TYPE_WARNING, $message, $parameters, $domain, $locale);
     }
 
     /**
@@ -63,6 +79,17 @@ abstract class AbstractController extends Controller {
      */
     protected function addFlashInfo($message = self::TYPE_INFO) {
         $this->addFlashMessage(self::TYPE_INFO, $message);
+    }
+
+    /**
+     * @param string $id
+     * @param array $parameters
+     * @param null|string $domain
+     * @param null|string $locale
+     * @return string
+     */
+    protected function trans($id, array $parameters = [], $domain = null, $locale = null) {
+        return $this->get('translator')->trans($id, $parameters, $domain, $locale);
     }
 
     /**

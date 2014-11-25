@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Role
  * @package Tutto\Bundle\UtilBundle\Entity
  *
- * @ORM\Entity()
  * @ORM\Table(name="roles")
+ * @ORM\MappedSuperclass()
  */
 class Role {
     const ADMIN  = 'ADMIN';

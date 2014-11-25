@@ -4,6 +4,7 @@ namespace Tutto\Bundle\UtilBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Person
@@ -75,7 +76,7 @@ class Person {
     protected $taxType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Address")
+     * @ORM\ManyToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Address", cascade={"all"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      *
      * @var Address
@@ -83,7 +84,7 @@ class Person {
     protected $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Address")
+     * @ORM\ManyToOne(targetEntity="Tutto\Bundle\UtilBundle\Entity\Address", cascade={"all"})
      * @ORM\JoinColumn(name="correspondence_address_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      *
      * @var Address

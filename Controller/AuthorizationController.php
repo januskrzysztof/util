@@ -47,7 +47,7 @@ class AuthorizationController extends Controller {
     public function logoutAction() { }
 
     /**
-     * @Route("/check_path", name="tutto_check_path")
+     * @Route("/tutto/check/path", name="tutto_check_path")
      * @Method({"POST"})
      */
     public function checkAction() { }

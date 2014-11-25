@@ -39,12 +39,15 @@ class SecurityContextSubscriber implements EventSubscriberInterface {
      * @param FormEvent $event
      */
     public function preSetData(FormEvent $event) {
+        $session = $this->request->getSession();
+
         /** @var Exception $error */
         if ($this->request->attributes->has(SecurityContextInterface::AUTHENTICATION_ERROR)) {
             $error = $this->request->attributes->get(SecurityContextInterface::AUTHENTICATION_ERROR);
         } else {
-            $error = $this->request->getSession()->get(SecurityContextInterface::AUTHENTICATION_ERROR);
-            $this->request->getSession()->remove(SecurityContextInterface::AUTHENTICATION_ERROR);
+            $error    = $session->get(SecurityContextInterface::AUTHENTICATION_ERROR);
+            $username = $session->get(SecurityContextInterface::LAST_USERNAME);
+            $session->remove(SecurityContextInterface::AUTHENTICATION_ERROR);
         }
 
         if ($error) {
@@ -52,7 +55,7 @@ class SecurityContextSubscriber implements EventSubscriberInterface {
         }
 
         $event->setData(array_replace((array) $event->getData(), array(
-            '_username' => $this->request->getSession()->get(SecurityContextInterface::LAST_USERNAME)
+            '_username' => $username
         )));
     }
 
